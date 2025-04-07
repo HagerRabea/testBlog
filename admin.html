@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Panel</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>Add New Blog Post</h1>
+
+  <form id="add-post-form">
+    <input type="text" id="title" placeholder="Title" required><br><br>
+    <textarea id="content" placeholder="Content" required></textarea><br><br>
+    <input type="text" id="author" placeholder="Author" required><br><br>
+    <input type="date" id="date" required><br><br>
+    <input type="url" id="imageURL" placeholder="Image URL"><br><br>
+    <button type="submit">Submit</button>
+  </form>
+
+  <p id="message"></p>
+
+  <script>
+    document.getElementById('add-post-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const newPost = {
+        Title: document.getElementById('title').value,
+        Content: document.getElementById('content').value,
+        Author: document.getElementById('author').value,
+        Date: document.getElementById('date').value,
+        ImageURL: document.getElementById('imageURL').value,
+      };
+
+      fetch('https://api.sheetbest.com/sheets/5663ff34-e948-498c-95c2-6421cd3d8a1b', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(newPost)
+      })
+      .then(response => response.json())
+      .then(data => {
+        document.getElementById('message').innerText = 'Post added successfully!';
+        document.getElementById('add-post-form').reset();
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        document.getElementById('message').innerText = 'Error adding post.';
+      });
+    });
+  </script>
+</body>
+</html>
