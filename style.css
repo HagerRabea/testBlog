@@ -8,11 +8,15 @@ body {
     align-items: center;
     height: 100vh;
   }
+  *{
+text-align: center;
+  }
   
   h1 {
     text-align: center;
     color: #333;
     margin-bottom: 20px;
+    background-color: #45a049;
   }
   
   form {
