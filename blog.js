@@ -38,6 +38,23 @@ fetch('https://api.sheetbest.com/sheets/5663ff34-e948-498c-95c2-6421cd3d8a1b')
 
       blogContainer.appendChild(postElement);
 
+      // Fetch comments for the current post by postId
+      fetch(`https://api.sheetbest.com/sheets/19b25d90-3d87-42cc-8920-aea3cd0b5e20?post_id=${postId}`)
+        .then(response => response.json())
+        .then(comments => {
+          const commentsList = document.getElementById(`comments-list-${postId}`);
+          const commentCount = document.getElementById(`comment-count-${postId}`);
+
+          // Add each comment to the comments list of the current post
+          comments.forEach(comment => {
+            addCommentToPost(postId, comment.author, comment.comment, comment.timestamp);
+          });
+
+          // Update the comment count for this specific post
+          commentCount.innerText = comments.length;
+        })
+        .catch(error => console.error('Error loading comments:', error));
+
       // Attach event listener to each form after creating it
       const form = document.getElementById(`form-${postId}`);
       form.addEventListener('submit', function (e) {
@@ -54,7 +71,8 @@ fetch('https://api.sheetbest.com/sheets/5663ff34-e948-498c-95c2-6421cd3d8a1b')
           timestamp: timestamp
         };
 
-        fetch(`https://api.sheetbest.com/sheets/19b25d90-3d87-42cc-8920-aea3cd0b5e20`, { // <-- Your new comments sheet URL
+        // Post new comment to the server
+        fetch('https://api.sheetbest.com/sheets/19b25d90-3d87-42cc-8920-aea3cd0b5e20', { // <-- Your new comments sheet URL
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
@@ -63,10 +81,10 @@ fetch('https://api.sheetbest.com/sheets/5663ff34-e948-498c-95c2-6421cd3d8a1b')
         })
         .then(response => {
           if (response.ok) {
-            // Add the comment immediately
+            // Add the comment immediately to the page
             addCommentToPost(postId, author, comment, timestamp);
             form.reset(); // Clear the form
-            alert(' submitting comment correctly');
+            alert('Submitting comment successfully');
           } else {
             alert('Error submitting comment.');
           }
@@ -84,6 +102,7 @@ fetch('https://api.sheetbest.com/sheets/5663ff34-e948-498c-95c2-6421cd3d8a1b')
 function addCommentToPost(postId, author, comment, timestamp) {
   const commentsList = document.getElementById(`comments-list-${postId}`);
 
+console.log(postId)
   const commentElement = document.createElement('div');
   commentElement.classList.add('comment');
   commentElement.innerHTML = `
@@ -94,7 +113,7 @@ function addCommentToPost(postId, author, comment, timestamp) {
 
   commentsList.appendChild(commentElement);
 
-  // Increase comment count
+  // Increase comment count for the specific post
   const countElement = document.getElementById(`comment-count-${postId}`);
   let currentCount = parseInt(countElement.innerText);
   countElement.innerText = currentCount + 1;
