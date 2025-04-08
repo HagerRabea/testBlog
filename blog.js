@@ -17,7 +17,7 @@ fetch('https://api.sheetbest.com/sheets/5663ff34-e948-498c-95c2-6421cd3d8a1b')
         <p><small>By ${post.Author} on ${post.Date}</small></p>
         <p>${post.Content}</p>
 
-        <a href="https://www.linkedin.com/shareArticle?mini=true&url=https://github.com/HagerRabea/testBlog&title=${encodeURIComponent(post.Title)}&summary=${encodeURIComponent(post.Content)}" target="_blank">
+        <a href="https://www.linkedin.com/shareArticle?mini=true&url=https://hagerrabea.github.io/testBlog/&title=${encodeURIComponent(post.Title)}&summary=${encodeURIComponent(post.Content)}" target="_blank">
           Share on LinkedIn
         </a>
 
